@@ -1,6 +1,13 @@
 <?php
-require 'Slim/Slim.php';
+require_once 'Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
+
+////////////////////////////////////////////////////////////////////////////////
+// imports
+include_once('service/AlbumService.php');
+
+////////////////////////////////////////////////////////////////////////////////
+// API endpoints
 
 $app = new \Slim\Slim();
 
@@ -15,5 +22,14 @@ $app->get('/hello/:name', function ($name) {
     echo "Hello, $name";
 });
 
+// hello world
+$app->get('/albums', function () {
+	$service = new AlbumService();
+    $albumList = $service->listAlbums('../albums/');
+    print json_encode($albumList);
+});
+
+$response = $app->response();
+$response->header("Content-Type", "application/json");
 $app->run();
 
